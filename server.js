@@ -1,7 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
 const { animals } = require('./data/animals');
 
 const PORT = process.env.PORT || 3001;
@@ -49,7 +48,6 @@ function findById(id, animalsArray) {
 }
 
 function createNewAnimal(body, animalsArray) {
-  console.log(body);
   const animal = body;
   animalsArray.push(animal);
   fs.writeFileSync(
@@ -88,15 +86,9 @@ app.get('/api/animals/:id', (req, res) => {
   if (result) {
     res.json(result);
   } else {
-    res.send(404);
+    res.sendStatus(404);
   }
 });
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
-});
-
-
 
 app.post('/api/animals', (req, res) => {
   //req.body is where our incoming content will be
@@ -109,6 +101,22 @@ app.post('/api/animals', (req, res) => {
     const animal = createNewAnimal(req.body, animals);
     res.json(req.body);
   }
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'))
 });
 
 
